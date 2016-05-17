@@ -1,0 +1,11 @@
+# include<stdio.h>
+union u1 {
+	int a;	
+	char b;
+}u;
+enum e1{A,B,C}e;
+int main() {
+	u.a = 20;
+	u.b = 'a';
+	e = A;
+}

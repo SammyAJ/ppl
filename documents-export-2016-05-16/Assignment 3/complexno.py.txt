@@ -1,0 +1,28 @@
+class ComplexOp :
+	def add(self,a, b):
+		return a + b
+	def sub(self,a, b):
+		return a - b
+	def mul(self,a, b):
+		return a * b
+	def div(self,a, b):
+		return a/b
+c1 = ComplexOp()
+a = complex(input("Enter first complex number in the format a + bj\n"))
+b = complex(input("Enter second complex number in the format a + bj\n"))
+print "addition is"
+print c1.add(a,b)
+print "\n"
+print "subtraction is"
+print c1.sub(a,b)
+print "\n"
+print "Multiplication is"
+print c1.mul(a,b)
+print "\n"
+print "Division is"
+print c1.div(a,b)
+print "\n"
+print "complex conjugate of first number is"
+print a.conjugate()
+print "\n"
+

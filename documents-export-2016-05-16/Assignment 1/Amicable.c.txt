@@ -1,0 +1,39 @@
+# include<stdio.h>
+int x = 1;
+int main() {
+	int i;
+	i = 0;
+	printf("The pairs of amicable numbers are:-\n");
+	while(i < 1001) {
+		isamiCable(i);
+		i++;
+	}
+	return 0;
+}
+int isamiCable(int a) {
+	int i;
+	int tmp = addPerfectDivisor(a);
+	int test = addPerfectDivisor(tmp);
+	if(a == test && a != tmp) {
+		if(x != 0)
+			printf("[%d, %d]\n", a, tmp);
+		if(x == 1)
+			x = 0;
+		else
+			x = 1;
+	
+	}
+	return x;
+}
+int addPerfectDivisor(int x) {
+	int m, sum;
+	sum = 0;
+	m = 1;
+	while(m < x) {
+		if(x % m == 0) {
+			sum = sum + m;
+		}
+		m++;
+	}
+	return sum;
+}

@@ -1,0 +1,19 @@
+#include<stdio.h>
+void fun(int a) {
+	char buffer1[12];
+	buffer1[0] = 'A';
+	buffer1[1] = 'B';
+	int *ret = buffer1;
+	ret = ret + 7;
+	printf("%p\n", *ret);
+	(*ret) += 8;
+	printf("%p\n", *ret);
+}
+int main() {
+	int x = 10;
+	fun(x);
+	x = 1;
+	printf("%d\n", x);
+	return 0;
+}
+

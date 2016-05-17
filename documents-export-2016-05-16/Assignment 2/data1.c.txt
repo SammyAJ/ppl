@@ -1,0 +1,7 @@
+#include<stdio.h>
+int main() {
+	int a = 10;
+	char b = 'c';
+	float c = 2.3;
+	return 0;
+}

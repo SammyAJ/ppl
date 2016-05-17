@@ -1,0 +1,14 @@
+def swp(a, b):
+	tmp = a
+	a = b
+	b = tmp
+	return a, b
+a = int(input("Enter first number:\n"))
+b = int(input("Enter second number:\n"))
+
+print "before swapping, A = %d, B = %d" %(a, b)
+x = swp(a, b)
+a = x[0]
+b = x[1]
+print "After swapping, A = %d, B = %d" %(a, b)
+

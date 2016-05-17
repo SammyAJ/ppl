@@ -1,0 +1,27 @@
+def getFilesToRead():
+	try:
+		a = raw_input("Enter the file name to read\n")
+		test = open(a, 'r')
+		return str(a)
+	except:
+		a = 0
+		print 'The file does not exist! Please check the name again'
+		return(getFilesToRead())
+def getFilesToWrite():
+	try:
+		b = raw_input("Enter the file name to copy to\n")
+		test = open(b, 'w')
+		return str(b)
+	except:
+		b = 0
+		print 'The file does not exist! Please check the name again'
+		return(getFilesToWrite())
+
+x1 = str(getFilesToRead())
+x2 = str(getFilesToWrite())
+f1 = open(x1, 'r')
+f2 = open(x2, 'w')
+tmp = f1.read()
+f2.write(tmp)
+f1.close()
+f2.close()

@@ -1,0 +1,242 @@
+# include<stdlib.h>
+# include<stdio.h>
+# include<string.h>
+/*
+* Steps to implement the TCP header
+*	i)Initialize
+*	ii)Then create a structure called Header containing the needed variables
+*	iii)This will create a whole TCP header
+*	iv)Then in the program, change the values of flags and other vars, and *	   then in the status field, show the status at perticular stage
+*	v)And done
+*/
+typedef struct Header {
+	short srcPort, destPort, checksum, window, options, padding;
+	int sequenceNo, ackNo, Data;
+	int *urgentPtr;
+	short ofset; 			//data offset
+	unsigned int URG : 1;
+	unsigned int ACK : 1;
+	unsigned int PSH : 1;
+	unsigned int RST : 1;
+	unsigned int SYN : 1;
+	unsigned int FIN : 1;		/*flags have following abbreviation:-
+					*URG:- urgent pointer flag.
+					*ACK:- Acknowledgement flag.
+					*PSH:- Push function flag.
+					*RST:- reset connection flag.
+					*SYN:- Syn flag used for deciding sequence no.
+					*FIN:- No more data from sender flag.
+					*/
+}Header;
+
+int main() {
+	char status[100];
+	Header head;
+	head.urgentPtr = &head.sequenceNo;
+	head.srcPort = head.destPort = 80;
+	head.ACK = 1;
+	head.PSH = 1;
+	head.sequenceNo = 1;
+	head.ackNo = 2;
+	head.window = 2;
+	head.options = 0;
+	int cnt = 1, choice;
+	char ch;
+	FILE *fp = fopen("HeaderFormat.txt", "r");
+	system("clear");
+	printf("%d", sizeof(head));
+	while(1) {
+		printf("Enter 32 bit i.e. 4 byte data :- ");
+		scanf("%d", &head.Data);
+runto:		printf("\t\tNote:-\n1)Enter 1 to enter source port\n2)Enter 2 to enter destination port\n3)Enter 3 to change value of URG\n4)Enter 4 to change value of ACK\n5)Enter 5 to change value of PSH\n6)Enter 6 to chage value of RST\n7)Enter 7 to change value of SYN\n8)Enter 8 to change value of FIN\n9)Enter 9 to input the value for option\n10)Enter 10 to go ahead\n> ");
+		scanf("%d", &choice);
+		switch(choice) {
+			case 1:
+				printf("Enter source port:-");
+				scanf("%hu", &head.srcPort);
+				goto runto;
+			case 2:
+				printf("Enter destination port:-");
+				scanf("%hu", &head.destPort);
+				goto runto;
+			case 3:
+				if(head.URG == 1) {
+					head.URG = 0;
+				}
+				else
+					head.URG = 1;
+				goto runto;
+			case 4:
+				if(head.ACK == 1) {
+					head.ACK = 0;
+				}
+				else
+					head.ACK = 1;
+				goto runto;
+					
+			case 5:
+				if(head.PSH == 1) {
+					head.PSH = 0;
+				}
+				else
+					head.PSH = 1;
+				goto runto;
+					
+			case 6:
+				if(head.RST == 1) {
+					head.RST = 0;
+				}
+				else
+					head.RST = 1;
+				goto runto;
+					
+			case 7:
+				if(head.SYN == 1) {
+					head.SYN = 0;
+				}
+				else
+					head.SYN = 1;
+				goto runto;
+					
+			case 8:
+				if(head.FIN = 1) {
+					head.FIN = 0;
+				}
+				else
+					head.FIN = 1;
+				goto runto;
+					
+			case 9:
+				printf(">");
+				scanf("%hu", &head.options);
+				goto runto;
+			
+			case 10:
+				break;
+		}
+		if(head.URG == 1) {
+			head.urgentPtr = &head.sequenceNo;
+		}
+		head.checksum = ~(head.srcPort) + ~(head.destPort) + ~(head.window) + ~(head.options);
+		head.checksum = ~(head.checksum);
+
+
+		while(fread(&ch, sizeof(ch), 1, fp)) {
+			if(cnt == 220) {
+				printf("%d", head.srcPort);
+			}
+			else if(cnt == 245) {
+				printf("%d\t", head.destPort);
+			}
+			else if(cnt == 357) {
+				printf("   %d\t", head.sequenceNo);
+			}
+			else if(cnt == 480) {
+				printf("           %d", head.ackNo);
+			}
+			else if(cnt == 653) {
+				printf("0xb3Hz |   0");
+				fread(&ch, sizeof(ch), 5, fp);
+				fread(&ch, sizeof(ch), 4, fp);
+				cnt = cnt + 9;
+			}
+			else if(cnt == 1150) {
+				printf("%d", head.Data);
+				fread(&ch, sizeof(ch), 1, fp);
+			}
+			else if(cnt == 671) {
+				printf("%d", head.URG);
+			}
+			else if(cnt == 673) {
+				printf("%d", head.ACK);
+			}
+			
+			else if(cnt == 675) {
+				printf("%d", head.PSH);
+			}
+			
+			else if(cnt == 677) {
+				printf("%d", head.RST);
+			}
+			
+			else if(cnt == 679) {
+				printf("%d", head.SYN);
+			}
+			else if(cnt == 681) {
+				printf("%d", head.FIN);
+			}
+			else if(cnt == 700) {
+				printf("%d", head.window);
+			}
+			else if(cnt == 875) {
+				printf("%d", head.checksum);
+			}
+			else if(cnt == 890) {
+				if(head.URG == 1) {
+					printf("       %p ", head.urgentPtr);
+					fread(&ch, sizeof(ch), 7, fp);
+				}
+			}
+			else if(cnt == 1000) {
+				printf("%d", head.options);
+			}
+			else if(cnt == 1037) {
+				printf("0000");
+				fread(&ch, sizeof(ch), 3, fp);
+			}
+			else 
+				printf("%c", ch);
+			cnt++;
+			
+		}
+		//composing status!
+		printf("Status :- \n");
+		printf("The source port number is %hu and the destination port number is %hu\n", head.srcPort, head.destPort);
+		printf("The current sequence number is %d\n", head.sequenceNo);
+		if(head.ACK == 1) {
+			printf("The sender is expecting to send the packet with sequence number %d\n", head.ackNo);
+		}
+		printf("The data starts from the address:- 0xb3Hz\n");
+		printf("The number of octets of data that the sender is willing to accept from local buffer is %hu\n", head.window);
+		if(head.URG == 1) 
+			printf("The urgent pointer is pointing to the sequence number of the octet following the urgent data\n");
+		else
+			printf("There is no urgent data\n");
+		if(head.PSH == 1) 
+			printf("The push function is active\n");
+		else
+			printf("The push function is inactive\n");
+		if(head.RST == 1) {
+			printf("The connection is being reset\n");
+		}
+		if(head.SYN == 1) 
+			printf("sequence number is the initial sequence number (ISN) and the first data octet is ISN+1\n");
+		else
+			printf("sequence number is 1 which is first data octet in this segment\n");
+	
+		if(head.FIN == 1) 
+			printf("no more data from user\n");
+		if(head.options == 0) {
+			printf("End of option list\n");
+		}
+		else if(head.options == 1) {
+			printf("No opteration\n");
+		}
+		else {
+			printf("Maximum segment size\n");
+		}		
+
+		//done and printing status
+		
+		fclose(fp);
+		fp = fopen("HeaderFormat.txt", "r");
+		cnt = 1;
+		getchar();
+		getchar();
+		system("clear");
+		head.sequenceNo++;
+		head.ackNo++;
+		head.window++;
+	}
+	return 0;
+}

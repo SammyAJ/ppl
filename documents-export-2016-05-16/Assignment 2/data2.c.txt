@@ -1,0 +1,11 @@
+#include<stdio.h>
+struct s1 {
+	int a;
+	int b;
+	char c;
+}s;
+int main() {
+	s.a = 20;
+	int arr[] = {1,2,3,4,5};
+	return 0;
+}

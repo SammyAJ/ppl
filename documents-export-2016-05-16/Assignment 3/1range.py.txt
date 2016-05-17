@@ -1,0 +1,26 @@
+#Program to get a range of numbers and then input a list of values to skip. Then printing the numbers missing in the list.
+strt = int(input("Enter the starting of list:\n"))
+end = int(input("Enter the end of list:\n"))
+vals1 = input("Enter a list of elements to skip separated by comma:\n")
+try:
+	vals = list(vals1)
+except:
+	vals = [0, vals1]
+	
+print("\n")
+def contains(vals, m):
+	x = 0
+	for x in range(0, len(vals)):
+		if m == int(vals[x]) :
+			return 1
+	return 0
+for i in range(strt, end + 1):
+	te = contains(vals, i)
+	if te == 0:
+		print i
+#in case of 5-6 kind or range is given,
+#d = [0,0]
+#b = input("")
+#lis = list(b)
+#for i in range(int(lis[0]), int(lis[2]) + 1):
+#	d.append(i)

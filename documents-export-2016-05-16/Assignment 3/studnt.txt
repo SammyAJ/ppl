@@ -1,0 +1,6 @@
+90 abc
+30 pqr
+40 mnr
+77 xyz
+80 gfh
+80 gfh

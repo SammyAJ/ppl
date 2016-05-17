@@ -1,0 +1,7 @@
+(defun fifth()
+(princ "Enter a list in braces: ")
+(setq val (read))
+(princ "The fifth element is: ")
+(print (car (cdr (cdr (cdr (cdr val))))))
+)
+(fifth)
